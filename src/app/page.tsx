@@ -1,8 +1,7 @@
-export default function Home() {
+export default function MyPlanPage() {
   return (
-    <main>
-      <h1>FitLog</h1>
-      <p>Workout Library</p>
+    <main className="min-h-screen">
+      <h1>My Plan</h1>
     </main>
   );
 }
