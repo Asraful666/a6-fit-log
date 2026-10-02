@@ -2274,3 +2274,35 @@ button {
 .details-image-wrapper {
   position: relative;
 }
+.home-loading {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 60px 20px;
+}
+
+.home-loading p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-loading-spinner {
+  width: 42px;
+  height: 42px;
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #ccff00;
+  border-radius: 50%;
+  animation: fitlog-spin 0.8s linear infinite;
+}
+
+@keyframes fitlog-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

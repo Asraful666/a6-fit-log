@@ -1,9 +1,9 @@
 export default function Loading() {
   return (
-    <main className="loading-page">
-      <div className="loading-spinner" />
+    <main className="home-loading">
+      <div className="home-loading-spinner"></div>
 
-      <p>LOADING WORKOUTS...</p>
+      <p>Loading workouts...</p>
     </main>
   );
 }
