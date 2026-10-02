@@ -2271,3 +2271,6 @@ button {
     width: 100%;
   }
 }
+.details-image-wrapper {
+  position: relative;
+}

@@ -27,6 +27,7 @@ export default function WorkoutDetailsPage() {
     async function loadWorkout() {
       try {
         setLoading(true);
+        setError(false);
 
         const data = await getWorkoutById(id);
 
@@ -58,11 +59,15 @@ export default function WorkoutDetailsPage() {
       <main className="details-page">
         <div className="details-error">
           <h1>WORKOUT NOT FOUND</h1>
+
           <p>
             The workout you are looking for does not exist.
           </p>
 
-          <Link href="/" className="back-workouts-btn">
+          <Link
+            href="/"
+            className="back-workouts-btn"
+          >
             Back to workouts
           </Link>
         </div>
@@ -74,19 +79,22 @@ export default function WorkoutDetailsPage() {
     <main className="details-page">
       <section className="details-container">
 
-        {/* LEFT - IMAGE */}
+        {/* ================= LEFT - IMAGE ================= */}
+
         <div className="details-image-wrapper">
           <Image
             src={workout.image}
             alt={workout.name}
             fill
+            priority
             sizes="(max-width: 800px) 100vw, 50vw"
             className="details-image"
             unoptimized
           />
         </div>
 
-        {/* RIGHT - CONTENT */}
+        {/* ================= RIGHT - CONTENT ================= */}
+
         <div className="details-content">
 
           <h1>{workout.name}</h1>
@@ -95,7 +103,8 @@ export default function WorkoutDetailsPage() {
             {workout.description}
           </p>
 
-          {/* Tags */}
+          {/* ================= TAGS ================= */}
+
           <div className="details-tags">
             {workout.muscleGroups.map((group) => (
               <span key={group}>
@@ -104,48 +113,65 @@ export default function WorkoutDetailsPage() {
             ))}
           </div>
 
-          {/* Specs */}
+          {/* ================= SPECS ================= */}
+
           <div className="details-specs">
 
             <div className="spec-row">
               <span>EQUIPMENT</span>
-              <strong>{workout.equipment}</strong>
+              <strong>
+                {workout.equipment}
+              </strong>
             </div>
 
             <div className="spec-row">
               <span>DIFFICULTY</span>
-              <strong>{workout.difficulty}</strong>
+              <strong>
+                {workout.difficulty}
+              </strong>
             </div>
 
             <div className="spec-row">
               <span>SETS</span>
-              <strong>{workout.sets}</strong>
+              <strong>
+                {workout.sets}
+              </strong>
             </div>
 
             <div className="spec-row">
               <span>REPS</span>
-              <strong>{workout.reps}</strong>
+              <strong>
+                {workout.reps}
+              </strong>
             </div>
 
             <div className="spec-row">
               <span>DURATION</span>
-              <strong>{workout.duration} min</strong>
+              <strong>
+                {workout.duration} min
+              </strong>
             </div>
 
             <div className="spec-row">
               <span>CALORIES</span>
-              <strong>{workout.caloriesBurned} kcal</strong>
+              <strong>
+                {workout.caloriesBurned} kcal
+              </strong>
             </div>
 
             <div className="spec-row">
               <span>RATING</span>
-              <strong>{workout.rating}</strong>
+              <strong>
+                {workout.rating}
+              </strong>
             </div>
 
           </div>
 
-          {/* Instructions */}
+          {/* ================= INSTRUCTIONS ================= */}
+
           <div className="instructions">
+
             <h2>INSTRUCTIONS</h2>
 
             <ol>
@@ -153,14 +179,17 @@ export default function WorkoutDetailsPage() {
                 (instruction, index) => (
                   <li key={index}>
                     <span>{index + 1}.</span>
+
                     <p>{instruction}</p>
                   </li>
                 )
               )}
             </ol>
+
           </div>
 
-          {/* Buttons */}
+          {/* ================= ACTION BUTTONS ================= */}
+
           <div className="details-actions">
 
             <button
@@ -170,7 +199,9 @@ export default function WorkoutDetailsPage() {
                   ? "already-added"
                   : ""
               }`}
-              onClick={() => addToPlan(workout)}
+              onClick={() =>
+                addToPlan(workout)
+              }
             >
               {isInPlan(workout.id)
                 ? "✓ Added to today's plan"
@@ -184,7 +215,9 @@ export default function WorkoutDetailsPage() {
                   ? "already-saved"
                   : ""
               }`}
-              onClick={() => addToSaved(workout)}
+              onClick={() =>
+                addToSaved(workout)
+              }
             >
               {isSaved(workout.id)
                 ? "✓ Saved"
