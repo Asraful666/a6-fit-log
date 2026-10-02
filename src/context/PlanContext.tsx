@@ -43,7 +43,7 @@ export function PlanProvider({
   const [saved, setSaved] = useState<PlanWorkout[]>([]);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load localStorage
+  // Load saved data from localStorage
   useEffect(() => {
     try {
       const storedPlan = localStorage.getItem(PLAN_KEY);
@@ -63,7 +63,7 @@ export function PlanProvider({
     }
   }, []);
 
-  // Save plan
+  // Save plan to localStorage
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -73,7 +73,7 @@ export function PlanProvider({
     );
   }, [plan, isHydrated]);
 
-  // Save saved workouts
+  // Save saved workouts to localStorage
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -85,66 +85,74 @@ export function PlanProvider({
 
   // Add workout to today's plan
   const addToPlan = (workout: Workout) => {
-    setPlan((currentPlan) => {
-      if (currentPlan.some((item) => item.id === workout.id)) {
-        toast("Already in today's plan");
-        return currentPlan;
-      }
+    if (plan.some((item) => item.id === workout.id)) {
+      toast("Already in today's plan");
+      return;
+    }
 
-      if (currentPlan.length >= 5) {
-        toast.error("Today's plan can contain only 5 workouts");
-        return currentPlan;
-      }
+    if (plan.length >= 5) {
+      toast.error(
+        "Today's plan can contain only 5 workouts"
+      );
+      return;
+    }
 
-      const newWorkout: PlanWorkout = {
-        ...workout,
-        isDone: false,
-      };
+    const newWorkout: PlanWorkout = {
+      ...workout,
+      isDone: false,
+    };
 
-      toast.success("Added to today's plan");
+    setPlan((currentPlan) => [
+      ...currentPlan,
+      newWorkout,
+    ]);
 
-      return [...currentPlan, newWorkout];
-    });
+    toast.success("Added to today's plan");
   };
 
-  // Remove from plan
+  // Remove workout from today's plan
   const removeFromPlan = (id: number) => {
     setPlan((currentPlan) =>
-      currentPlan.filter((workout) => workout.id !== id)
+      currentPlan.filter(
+        (workout) => workout.id !== id
+      )
     );
 
     toast.success("Removed from today's plan");
   };
 
-  // Add to saved
+  // Save workout for later
   const addToSaved = (workout: Workout) => {
-    setSaved((currentSaved) => {
-      if (currentSaved.some((item) => item.id === workout.id)) {
-        toast("Already saved");
-        return currentSaved;
-      }
+    if (saved.some((item) => item.id === workout.id)) {
+      toast("Already saved");
+      return;
+    }
 
-      const newWorkout: PlanWorkout = {
-        ...workout,
-        isDone: false,
-      };
+    const newWorkout: PlanWorkout = {
+      ...workout,
+      isDone: false,
+    };
 
-      toast.success("Saved for later");
+    setSaved((currentSaved) => [
+      ...currentSaved,
+      newWorkout,
+    ]);
 
-      return [...currentSaved, newWorkout];
-    });
+    toast.success("Saved for later");
   };
 
-  // Remove from saved
+  // Remove workout from saved
   const removeFromSaved = (id: number) => {
     setSaved((currentSaved) =>
-      currentSaved.filter((workout) => workout.id !== id)
+      currentSaved.filter(
+        (workout) => workout.id !== id
+      )
     );
 
     toast.success("Removed from saved");
   };
 
-  // Mark as done
+  // Mark workout as done / undone
   const markAsDone = (id: number) => {
     setPlan((currentPlan) =>
       currentPlan.map((workout) =>
@@ -160,12 +168,18 @@ export function PlanProvider({
     toast.success("Workout status updated");
   };
 
+  // Check if workout is already in plan
   const isInPlan = (id: number) => {
-    return plan.some((workout) => workout.id === id);
+    return plan.some(
+      (workout) => workout.id === id
+    );
   };
 
+  // Check if workout is already saved
   const isSaved = (id: number) => {
-    return saved.some((workout) => workout.id === id);
+    return saved.some(
+      (workout) => workout.id === id
+    );
   };
 
   const value = useMemo(
