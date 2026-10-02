@@ -1,122 +1,200 @@
+"use client";
+
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import { getWorkoutById } from "@/utils/api";
+import { usePlan } from "@/context/PlanContext";
+import type { Workout } from "@/types";
 
-type Props = {
-  params: Promise<{
-    id: string;
-  }>;
-};
+export default function WorkoutDetailsPage() {
+  const params = useParams();
+  const id = String(params.id);
 
-export default async function WorkoutDetailsPage({ params }: Props) {
-  const { id } = await params;
+  const [workout, setWorkout] = useState<Workout | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  let workout;
+  const {
+    addToPlan,
+    addToSaved,
+    isInPlan,
+    isSaved,
+  } = usePlan();
 
-  try {
-    workout = await getWorkoutById(id);
-  } catch {
-    notFound();
+  useEffect(() => {
+    async function loadWorkout() {
+      try {
+        setLoading(true);
+
+        const data = await getWorkoutById(id);
+
+        setWorkout(data);
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadWorkout();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <main className="details-page">
+        <div className="details-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading workout...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (error || !workout) {
+    return (
+      <main className="details-page">
+        <div className="details-error">
+          <h1>WORKOUT NOT FOUND</h1>
+          <p>
+            The workout you are looking for does not exist.
+          </p>
+
+          <Link href="/" className="back-workouts-btn">
+            Back to workouts
+          </Link>
+        </div>
+      </main>
+    );
   }
 
   return (
     <main className="details-page">
-      <div className="details-container">
-        <section className="details-main">
+      <section className="details-container">
 
-          {/* LEFT — IMAGE */}
-          <div className="details-image-box">
-            <Image
-              src={workout.image}
-              alt={workout.name}
-              fill
-              priority
-              sizes="(max-width: 900px) 100vw, 48vw"
-              className="details-image"
-            />
+        {/* LEFT - IMAGE */}
+        <div className="details-image-wrapper">
+          <Image
+            src={workout.image}
+            alt={workout.name}
+            fill
+            sizes="(max-width: 800px) 100vw, 50vw"
+            className="details-image"
+            unoptimized
+          />
+        </div>
+
+        {/* RIGHT - CONTENT */}
+        <div className="details-content">
+
+          <h1>{workout.name}</h1>
+
+          <p className="details-description">
+            {workout.description}
+          </p>
+
+          {/* Tags */}
+          <div className="details-tags">
+            {workout.muscleGroups.map((group) => (
+              <span key={group}>
+                {group}
+              </span>
+            ))}
           </div>
 
-          {/* RIGHT — CONTENT */}
-          <div className="details-info">
-            <h1>{workout.name}</h1>
+          {/* Specs */}
+          <div className="details-specs">
 
-            <p className="details-description">
-              {workout.description}
-            </p>
-
-            {/* TAGS */}
-            <div className="details-tags">
-              {workout.muscleGroups.map((muscle) => (
-                <span key={muscle}>{muscle}</span>
-              ))}
+            <div className="spec-row">
+              <span>EQUIPMENT</span>
+              <strong>{workout.equipment}</strong>
             </div>
 
-            {/* SPECS */}
-            <div className="details-specs">
-              <div className="spec-row">
-                <span>EQUIPMENT</span>
-                <strong>{workout.equipment}</strong>
-              </div>
-
-              <div className="spec-row">
-                <span>DIFFICULTY</span>
-                <strong>{workout.difficulty}</strong>
-              </div>
-
-              <div className="spec-row">
-                <span>SETS</span>
-                <strong>{workout.sets}</strong>
-              </div>
-
-              <div className="spec-row">
-                <span>REPS</span>
-                <strong>{workout.reps}</strong>
-              </div>
-
-              <div className="spec-row">
-                <span>DURATION</span>
-                <strong>{workout.duration} min</strong>
-              </div>
-
-              <div className="spec-row">
-                <span>CALORIES</span>
-                <strong>{workout.caloriesBurned} kcal</strong>
-              </div>
-
-              <div className="spec-row">
-                <span>RATING</span>
-                <strong>{workout.rating}</strong>
-              </div>
+            <div className="spec-row">
+              <span>DIFFICULTY</span>
+              <strong>{workout.difficulty}</strong>
             </div>
 
-            {/* INSTRUCTIONS */}
-            <section className="instructions">
-              <h2>INSTRUCTIONS</h2>
+            <div className="spec-row">
+              <span>SETS</span>
+              <strong>{workout.sets}</strong>
+            </div>
 
-              <ol>
-                {workout.instructions.map((instruction, index) => (
+            <div className="spec-row">
+              <span>REPS</span>
+              <strong>{workout.reps}</strong>
+            </div>
+
+            <div className="spec-row">
+              <span>DURATION</span>
+              <strong>{workout.duration} min</strong>
+            </div>
+
+            <div className="spec-row">
+              <span>CALORIES</span>
+              <strong>{workout.caloriesBurned} kcal</strong>
+            </div>
+
+            <div className="spec-row">
+              <span>RATING</span>
+              <strong>{workout.rating}</strong>
+            </div>
+
+          </div>
+
+          {/* Instructions */}
+          <div className="instructions">
+            <h2>INSTRUCTIONS</h2>
+
+            <ol>
+              {workout.instructions.map(
+                (instruction, index) => (
                   <li key={index}>
                     <span>{index + 1}.</span>
                     <p>{instruction}</p>
                   </li>
-                ))}
-              </ol>
-            </section>
-
-            {/* ACTIONS */}
-            <div className="details-actions">
-              <button className="add-plan-btn">
-                ▣ &nbsp; Add to today&apos;s plan
-              </button>
-
-              <button className="save-btn">
-                ♡ &nbsp; Save for later
-              </button>
-            </div>
+                )
+              )}
+            </ol>
           </div>
 
-        </section>
-      </div>
+          {/* Buttons */}
+          <div className="details-actions">
+
+            <button
+              type="button"
+              className={`add-plan-btn ${
+                isInPlan(workout.id)
+                  ? "already-added"
+                  : ""
+              }`}
+              onClick={() => addToPlan(workout)}
+            >
+              {isInPlan(workout.id)
+                ? "✓ Added to today's plan"
+                : "＋ Add to today's plan"}
+            </button>
+
+            <button
+              type="button"
+              className={`save-workout-btn ${
+                isSaved(workout.id)
+                  ? "already-saved"
+                  : ""
+              }`}
+              onClick={() => addToSaved(workout)}
+            >
+              {isSaved(workout.id)
+                ? "✓ Saved"
+                : "♡ Save for later"}
+            </button>
+
+          </div>
+
+        </div>
+      </section>
     </main>
   );
 }
