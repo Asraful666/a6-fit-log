@@ -7,8 +7,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "FitLog — Workout Library",
-  description:
-    "A dark, no-nonsense workout companion for planning and tracking your training.",
+  description: "Train with intent. Log every set.",
 };
 
 export default function RootLayout({
@@ -18,21 +17,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#0a0a0a] text-white antialiased">
+      <body>
         <PlanProvider>
           <Navbar />
 
-          <main className="min-h-screen">
-            {children}
-          </main>
+          <main>{children}</main>
 
           <Toaster
             position="top-right"
             toastOptions={{
+              duration: 2500,
               style: {
-                background: "#1a1a1a",
+                background: "#111214",
                 color: "#ffffff",
-                border: "1px solid #2a2a2a",
+                border: "1px solid #292b2f",
+                borderRadius: "6px",
               },
             }}
           />

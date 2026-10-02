@@ -236,3 +236,234 @@ button {
   }
 }
 
+/* ================================
+   FITLOG NAVBAR
+================================ */
+
+.fitlog-navbar {
+  width: 100%;
+  height: 64px;
+
+  background: #0d0e10;
+  border-bottom: 1px solid #242529;
+}
+
+.fitlog-navbar-inner {
+  width: 100%;
+  max-width: 1180px;
+  height: 100%;
+
+  margin: 0 auto;
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: relative;
+}
+
+/* Logo */
+
+.fitlog-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+
+  transition: opacity 0.2s ease;
+}
+
+.fitlog-logo:hover {
+  opacity: 0.8;
+}
+
+.fitlog-logo img {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
+
+/* Center Navigation */
+
+.fitlog-nav {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fitlog-nav-link {
+  height: 28px;
+
+  padding: 0 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #777a80;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  border-radius: 999px;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.fitlog-nav-link:hover {
+  color: #ffffff;
+}
+
+.fitlog-nav-link.active {
+  color: #0a0a0a;
+  background: #ccff00;
+  font-weight: 700;
+}
+
+/* Right Status */
+
+.fitlog-status {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.fitlog-status-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #a1a3a8;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  transition: color 0.2s ease;
+}
+
+.fitlog-status-item:hover {
+  color: #ffffff;
+}
+
+/* Plan Count */
+
+.fitlog-plan-count {
+  min-width: 19px;
+  height: 19px;
+
+  padding: 0 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ccff00;
+  color: #080808;
+
+  border-radius: 50%;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* Saved Count */
+
+.fitlog-saved-count {
+  min-width: 19px;
+  height: 19px;
+
+  padding: 0 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #4b4d52;
+  color: #a1a3a8;
+
+  border-radius: 50%;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 700px) {
+  .fitlog-navbar {
+    height: 58px;
+  }
+
+  .fitlog-navbar-inner {
+    padding: 0 14px;
+  }
+
+  .fitlog-logo span {
+    display: none;
+  }
+
+  .fitlog-logo img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .fitlog-nav {
+    position: static;
+
+    transform: none;
+
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .fitlog-nav-link {
+    height: 27px;
+    padding: 0 11px;
+
+    font-size: 10px;
+  }
+
+  .fitlog-status {
+    gap: 8px;
+  }
+
+  .fitlog-status-item {
+    gap: 4px;
+    font-size: 9px;
+  }
+
+  .fitlog-plan-count,
+  .fitlog-saved-count {
+    min-width: 17px;
+    height: 17px;
+
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fitlog-status {
+    gap: 5px;
+  }
+
+  .fitlog-status-item span:first-child {
+    display: none;
+  }
+}
