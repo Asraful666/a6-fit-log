@@ -1,7 +1,15 @@
-export default function MyPlanPage() {
+import Hero from "@/components/Hero";
+import LibrarySection from "@/components/LibrarySection";
+import { getAllWorkouts } from "@/utils/api";
+
+export default async function HomePage() {
+  const workouts = await getAllWorkouts();
+
   return (
-    <main className="min-h-screen">
-      <h1>My Plan</h1>
-    </main>
+    <>
+      <Hero />
+
+      <LibrarySection workouts={workouts} />
+    </>
   );
 }
